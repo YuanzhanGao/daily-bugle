@@ -31,7 +31,7 @@ recordRoutes.route("/account/register").post(async function (req, res) {
       error=> console.error(error)
       );
   } catch (e) {
-  console.log("An error occurred when creating a new user account. " + e);
+  console.log("An error occurred when creating a new user account: " + e);
   }
 
 });
