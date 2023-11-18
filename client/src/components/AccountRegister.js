@@ -1,5 +1,6 @@
 import React, {useState} from "react";
 import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 
 const AccountRegister = () => {
 
@@ -18,6 +19,9 @@ const AccountRegister = () => {
         confirm_password: ""
     }
     );
+
+    // a useState to decide whether to display user password
+    const [showPassword, setShowPassword] = useState(false);
 
     function password_confirm () {
         if (ac.password === ac.confirm_password) {
@@ -61,7 +65,7 @@ const AccountRegister = () => {
 
         setAC({ name: "", email: "", password: "", confirm_password: ""});
         console.log("Insertion Completed!");
-        navigate("/");
+        navigate("/login");
         
 
     }
@@ -101,7 +105,7 @@ const AccountRegister = () => {
 
                 <div className="field">
                     <label>Password: </label>
-                    <input type = "text" 
+                    <input type = {showPassword ? "text": "password"}
                     name = "password" 
                     placeholder="Password"
                     value = {ac.value}
@@ -110,11 +114,21 @@ const AccountRegister = () => {
                         {...prevState, password: e.target.value}
                     )
                     )}></input>
+                    {/* Toggle to allow users to show passwords or not */}
+                    <label htmlFor="check"> Show Password</label>
+                    <input
+                        id="check"
+                        type="checkbox"
+                        value={showPassword}
+                        onChange={() =>
+                            setShowPassword((prev) => !prev)
+                        }
+                    />
                 </div>
 
                 <div className="field">
                     <label>Confirm Password: </label>
-                    <input type = "text" 
+                    <input type = {showPassword ? "text" : "password"}
                     name = "confirm_password"
                     placeholder="Confirm Your Password"
                     value = {ac.value}
@@ -128,7 +142,8 @@ const AccountRegister = () => {
 
                 <button className="ui button blue">Register Account</button>
             </form>
-        
+            <br></br>
+            <Link to = "/login">Log in Your Account</Link>
         </div>
         );
 };

@@ -11,7 +11,7 @@ const dbo = require("./conn");
 // This help convert the id from string to ObjectId for the _id.
 const ObjectId = require("mongodb").ObjectId;
  
-// This section will help you create a new record.
+// This section will help you create a new account.
 recordRoutes.route("/account/register").post(async function (req, res) {
   //get the database
   let db_connect = dbo.getDb();
@@ -23,15 +23,44 @@ recordRoutes.route("/account/register").post(async function (req, res) {
   };
 
   try {
-    console.log("Inserting...");
-    await db_connect.collection("records").insertOne(myobj).then( 
+    await db_connect.collection("records")
+    .insertOne(myobj)
+    .then( 
       results => res.send(results)
       )
     .catch(
       error=> console.error(error)
       );
   } catch (e) {
-  console.log("An error occurred when creating a new user account: " + e);
+    console.log("An error occurred when creating a new user account: " + e);
+  }
+
+});
+
+
+
+// This section will help you login.
+recordRoutes.route("/account/login").post(async function (req, res) {
+  //get the database
+  let db_connect = dbo.getDb();
+
+  let myobj = {
+    email: req.body.email,
+    password: req.body.password
+  };
+
+  try {
+    await db_connect.collection("records")
+    .find(myobj)
+    .toArray()
+    .then( 
+      results => res.send(results)
+      )
+    .catch(
+      error=> console.error(error)
+      );
+  } catch (e) {
+  console.log("An error occurred when finding a new user account: " + e);
   }
 
 });
