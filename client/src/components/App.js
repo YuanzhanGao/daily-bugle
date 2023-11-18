@@ -16,6 +16,7 @@ function App() {
 
   return (
     <div className='ui container'>
+      {/* Wrap everything within CookiesProvider so that the cookie object is global */}
       <CookiesProvider>
         <Router>
           <Routes>
