@@ -16,8 +16,8 @@ module.exports = {
       console.error(e);
     }
 
-    // get the employees Schema
-    _db = client.db("users");
+    // get the Users Schema
+    _db = client.db("DailyBugle");
 
     return (_db === undefined ? false : true);
   },

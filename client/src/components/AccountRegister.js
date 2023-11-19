@@ -23,16 +23,36 @@ const AccountRegister = () => {
     // a useState to decide whether to display user password
     const [showPassword, setShowPassword] = useState(false);
 
-    function password_confirm () {
-        if (ac.password === ac.confirm_password) {
-            return true;
-        }
-        else {
-            return false;
-        }
+    // a function that checks for duplicate email (we do not allow for duplicate email)
+    async function account_duplicate_check(e, email) {
+        var has_dup;
 
-    };
+        e.preventDefault();
 
+        await fetch(`http://localhost:5000/account/check/duplicate/${email}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+          .then(response => response.json())
+          .then(result => {
+            if (result.length === 0) {
+                has_dup =  false; // meaning does not existing duplicate email; safe to register
+            } else {
+                has_dup = true; // meaning there exists duplicate email; promote the user to register with a new email
+            }
+          })
+          .catch(error => {
+                window.alert(error);
+                return;
+          });
+
+        return has_dup;
+    }
+
+
+    // a function that does the registration of the account
     async function register_account(e) {
         e.preventDefault();
 
@@ -41,12 +61,17 @@ const AccountRegister = () => {
             alert("Please fill all information!");
             return;
         }
-        
-        const check_password = password_confirm();
 
         // if password and confirm_password do not match, let the use redo
-        if (check_password === false) {
+        if (ac.password !== ac.confirm_password) {
             alert("Please re-confirm your password");
+            return;
+        }
+
+        // check whether there exists existing account with the same email
+        const existing_account = await account_duplicate_check(e, ac.email);
+        if (existing_account) {
+            alert("An account has been registered with the email, please try a new email!");
             return;
         }
 
@@ -64,7 +89,6 @@ const AccountRegister = () => {
           });
 
         setAC({ name: "", email: "", password: "", confirm_password: ""});
-        console.log("Insertion Completed!");
         navigate("/login");
         
 

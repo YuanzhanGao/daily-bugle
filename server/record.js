@@ -23,7 +23,7 @@ recordRoutes.route("/account/register").post(async function (req, res) {
   };
 
   try {
-    await db_connect.collection("records")
+    await db_connect.collection("users")
     .insertOne(myobj)
     .then( 
       results => res.send(results)
@@ -50,7 +50,7 @@ recordRoutes.route("/account/login").post(async function (req, res) {
   };
 
   try {
-    await db_connect.collection("records")
+    await db_connect.collection("users")
     .find(myobj)
     .toArray()
     .then( 
@@ -61,6 +61,56 @@ recordRoutes.route("/account/login").post(async function (req, res) {
       );
   } catch (e) {
   console.log("An error occurred when finding a new user account: " + e);
+  }
+
+});
+
+// this route checks whether there is an account with the same email in the database
+recordRoutes.route("/account/check/duplicate/:email").get(async function (req, res) {
+  //get the database
+  let db_connect = dbo.getDb();
+
+  let myobj = {
+    email: req.params.email
+  };
+
+  try {
+    await db_connect.collection("users")
+    .find(myobj)
+    .toArray()
+    .then( 
+      results => res.send(results)
+      )
+    .catch(
+      error=> console.error(error)
+      );
+  } catch (e) {
+  console.log("An error occurred when trying to verify existing account: " + e);
+  }
+
+});
+ 
+// this route gets all articles written by the user
+recordRoutes.route("/account/articles/:email").get(async function (req, res) {
+  //get the database
+  let db_connect = dbo.getDb();
+
+  let myobj = {
+    author: req.params.email
+  };
+
+  try {
+    await db_connect.collection("articles")
+    .find(myobj)
+    .toArray()
+    .then( 
+      results => res.send(results)
+      )
+    .catch(
+      error=> console.error(error)
+      );
+  } catch (e) {
+  console.log("An error occurred when trying to get articles written by the user: " + e);
   }
 
 });

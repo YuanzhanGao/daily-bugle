@@ -1,8 +1,10 @@
 import './App.css';
 import AccountRegister from './AccountRegister';
 import UserLogin from './Login';
+import Profile from './Profile';
+import DraftArticle from './draft';
 import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
-import { CookiesProvider, useCookies } from "react-cookie";
+import {useCookies} from "react-cookie";
 
 function App() {
 
@@ -16,8 +18,6 @@ function App() {
 
   return (
     <div className='ui container'>
-      {/* Wrap everything within CookiesProvider so that the cookie object is global */}
-      <CookiesProvider>
         <Router>
           <Routes>
             <Route 
@@ -29,9 +29,18 @@ function App() {
             path="/login"
             element={<UserLogin onLogin={handleLogin}/>} 
             />
+
+          <Route 
+            path="/profile"
+            element={<Profile curr_user = {cookies.user}/>} 
+            />
+
+          <Route 
+            path="/draft"
+            element={<DraftArticle curr_user = {cookies.user}/>} 
+            />
           </Routes>
         </Router>
-    </CookiesProvider>
     </div>
   );
 }

@@ -3,6 +3,10 @@ import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 
 const UserLogin = (props) => {
+
+    // defined the navigate variable
+    const navigate = useNavigate();
+
     // set the account state
     const [Login, setLogin] = useState({
         email:"",
@@ -37,13 +41,14 @@ const UserLogin = (props) => {
                 if (result.length === 0) {
                     // no user-record given is found
                     alert("No account under the given email is found, or the password is incorrect");
+                    return;
                 } else {
-                    console.log(result);
-                    // console.log(result[0]['name']);
-                    // localStorage.setItem("user_name", JSON.stringify(result[0]['name']));
-                    // localStorage.setItem("user_email", JSON.stringify(result[0]['email']));
-                    // localStorage.setItem("user_id", JSON.stringify(result[0]['_id']));
+                    // login the user and set up the global cookie
                     props.onLogin(result[0]);
+                    // reset login useState
+                    setLogin({email: "", password: ""});
+                    // after logging in, redirect the user to the Profile page
+                    navigate("/Profile");
                 }
             }
             )
@@ -51,6 +56,7 @@ const UserLogin = (props) => {
                 window.alert(error);
                 return;
           });
+
     }
 
     return (
