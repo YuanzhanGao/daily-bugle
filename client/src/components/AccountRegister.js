@@ -97,6 +97,7 @@ const AccountRegister = () => {
 
     return (
         <div className = "ui main">
+            <br></br>
             <h2>Register New Account</h2>
             <form className="ui form"
             onSubmit={register_account}

@@ -61,6 +61,7 @@ const UserLogin = (props) => {
 
     return (
         <div className = "ui main">
+            <br></br>
             <h2>Log In</h2>
             <form className="ui form"
             onSubmit={user_login}
