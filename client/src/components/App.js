@@ -3,6 +3,7 @@ import AccountRegister from './AccountRegister';
 import UserLogin from './Login';
 import Profile from './Profile';
 import DraftArticle from './draft';
+import ArticleList from './articleList';
 import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import {useCookies} from "react-cookie";
 import Container from 'react-bootstrap/Container';
@@ -65,6 +66,11 @@ function App() {
           <Route 
             path="/draft"
             element={<DraftArticle curr_user = {cookies.user}/>} 
+            />
+
+          <Route 
+            path="/profile/articles"
+            element={<ArticleList curr_user = {cookies.user}/>} 
             />
           </Routes>
         </Router>

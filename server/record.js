@@ -10,6 +10,8 @@ const dbo = require("./conn");
  
 // This help convert the id from string to ObjectId for the _id.
 const ObjectId = require("mongodb").ObjectId;
+
+// Account Related APIs -----------------------------------------------------------------------------------/
  
 // This section will help you create a new account.
 recordRoutes.route("/account/register").post(async function (req, res) {
@@ -89,6 +91,9 @@ recordRoutes.route("/account/check/duplicate/:email").get(async function (req, r
   }
 
 });
+
+
+// Article Related APIs -----------------------------------------------------------------------------------/
  
 // this route gets all articles written by the user
 recordRoutes.route("/account/articles/:email").get(async function (req, res) {
@@ -144,5 +149,4 @@ recordRoutes.route("/account/articles/draft").post(async function (req, res) {
 
 });
 
- 
 module.exports = recordRoutes;
