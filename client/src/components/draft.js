@@ -17,7 +17,8 @@ const DraftArticle = (props) => {
         author: "",
         category: [],
         upvote: 0,
-        downvote: 0
+        downvote: 0,
+        published: ""
     });
 
     // category option
@@ -55,6 +56,9 @@ const DraftArticle = (props) => {
         const drafted = {...Article};
         drafted['category'] = category_value;
         drafted['author'] = props.curr_user['email'];
+        // set published date
+        drafted['published'] = new Date().toLocaleDateString([], { year: 'numeric', month: 'long', day: 'numeric' });
+
         
         await fetch("http://localhost:5000/account/articles/draft", {
             method: "POST",
@@ -74,10 +78,10 @@ const DraftArticle = (props) => {
             author: "", 
             category: [],
             upvote: 0,
-            downvote: 0
+            downvote: 0,
+            published: ""
         });
 
-        console.log("Insertion Success!");
         navigate("/Profile");
 
     };

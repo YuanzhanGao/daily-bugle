@@ -131,7 +131,8 @@ recordRoutes.route("/account/articles/draft").post(async function (req, res) {
     author: req.body.author,
     category: req.body.category,
     upvote: req.body.upvote,
-    downvote: req.body.downvote
+    downvote: req.body.downvote,
+    published: req.body.published
   };
 
   try {
