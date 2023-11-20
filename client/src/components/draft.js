@@ -1,22 +1,84 @@
 import React, {useState} from "react";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
 
 const DraftArticle = (props) => {
     // defined the navigate variable
     const navigate = useNavigate();
-    
+
+    // make select compomnent animated
+    const animatedComponents = makeAnimated();
 
     const [Article, setArticle] = useState({
         title: "",
         content: "",
         author: "",
-        genre: "",
+        category: [],
         upvote: 0,
         downvote: 0
     });
 
-    function post_article(e) {
+    // category option
+    const options = [
+        { value: 'Politics', label: 'Politics' },
+        { value: 'Business', label: 'Business' },
+        { value: 'Sports', label: 'Sports' },
+        { value: 'Entertainment', label: 'Entertainment'}
+      ]
+
+
+
+    async function post_article(e) {
+        e.preventDefault();
+        if (Article.title === "") {
+            alert("Please have a title!");
+            return;
+        }
+
+        if (Article.content === "") {
+            alert("Please write something down!");
+            return;
+        }
+
+        if (Article.category.length ===0) {
+            alert("Please select a category of your post!");
+            return;
+        }
+
+        // set the category attribute of Article object to only category values
+        let category_value = Article.category.map(
+            (item) => item['value']
+        );
+
+        const drafted = {...Article};
+        drafted['category'] = category_value;
+        drafted['author'] = props.curr_user['email'];
+        
+        await fetch("http://localhost:5000/account/articles/draft", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(drafted),
+          })
+          .catch(error => {
+                window.alert(error);
+                return;
+          });
+
+        setArticle({ 
+            title: "", 
+            content: "", 
+            author: "", 
+            category: [],
+            upvote: 0,
+            downvote: 0
+        });
+
+        console.log("Insertion Success!");
+        navigate("/Profile");
 
     };
 
@@ -43,24 +105,33 @@ const DraftArticle = (props) => {
     
                     <div className="field">
                         <label>Article: </label>
-                        <textarea></textarea>
-                    </div>
-    
-                    {/* <div className="field">
-                        <label>Password: </label>
-                        <input type = "password" 
-                        name = "password" 
-                        placeholder="Password"
-                        value = {Login.value}
-                        onChange={(e) => setLogin(
+                        <textarea
+                        name = "content"
+                        placeholder="Start Your Article Here!"
+                        value={Article.value}
+                        onChange={(e) => setArticle(
                             prevState => (
-                            {...prevState, password: e.target.value}
+                            {...prevState, content: e.target.value}
                         )
-                        )}></input>
-                    </div> */}
+                        )}></textarea>
+                    </div>
+
+                    <Select
+                    components={animatedComponents}
+                    isMulti
+                    options={options}
+                    className="basic-multi-select"
+                    classNamePrefix="select"
+                    onChange={(e) => setArticle(
+                        prevState => (
+                        {...prevState, category: e}
+                    )
+                    )}/>
     
-                    
-                    <button className="ui button green center aligned content">Submit</button>
+                    <br></br>
+                    <div style={{display: 'flex', justifyContent: 'center'}}>
+                        <button className="ui button green">Submit</button>
+                    </div>
                 </form>
             
             </div>

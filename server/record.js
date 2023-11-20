@@ -115,5 +115,34 @@ recordRoutes.route("/account/articles/:email").get(async function (req, res) {
 
 });
  
+// This section will help you create a new article
+recordRoutes.route("/account/articles/draft").post(async function (req, res) {
+  //get the database
+  let db_connect = dbo.getDb();
+
+  let myobj = {
+    title: req.body.title,
+    content: req.body.content,
+    author: req.body.author,
+    category: req.body.category,
+    upvote: req.body.upvote,
+    downvote: req.body.downvote
+  };
+
+  try {
+    await db_connect.collection("articles")
+    .insertOne(myobj)
+    .then( 
+      results => res.send(results)
+      )
+    .catch(
+      error=> console.error(error)
+      );
+  } catch (e) {
+    console.log("An error occurred when creating a new article: " + e);
+  }
+
+});
+
  
 module.exports = recordRoutes;
