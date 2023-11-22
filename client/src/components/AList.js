@@ -25,9 +25,9 @@ const ArticleList = (props) => {
     ]);
 
     useEffect(()=> {
-        const getArticle = async () => {
+        const getArticles = async () => {
             if (props.curr_user) {
-                const response = await fetch(`http://localhost:5000/account/articles/${props.curr_user['email']}`, {
+                const response = await fetch(`http://localhost:5000/articles/${props.curr_user['email']}`, {
                     method: "GET",
                     headers: {
                     "Content-Type": "application/json",
@@ -39,39 +39,45 @@ const ArticleList = (props) => {
                 setarticleList(result);
             }
         };
-        getArticle();
+        getArticles();
     }, [props.curr_user]
     );
 
-    return (
-        <div className="ui main">
-            <br></br>
-            <button className="ui button blue" onClick = {redirect_write}>Start Writing!</button>
-            <br></br>
-            <br></br>
-            <div>
-            {
-                articleList.map(
-                    // Note the difference between () and {} in functional body; either do {return result} or just (result)
-                    // See React_js Note for more!
-                    item => (
-                        <div style={{display: 'flex', justifyContent: 'space-between', borderStyle: 'double', marginBottom: '15px'}}>
-                            <Link to = {`/article/${item['_id']}`}
-                            style={{color: 'gray', fontSize: '30px', textDecoration: 'None'}}>{item['title']}</Link>
-                            <div style={{marginRight: '10px'}}>
-                                <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
-                                <h4 style = {{color:'green'}}>{item['upvote']}</h4>
-                                <h4 style = {{color: 'red'}}>{item['downvote']}</h4>
+    if (props.curr_user) {
+        return (
+            <div className="ui main">
+                <br></br>
+                <button className="ui button blue" onClick = {redirect_write}>Start Writing!</button>
+                <br></br>
+                <br></br>
+                <div>
+                {
+                    articleList.map(
+                        // Note the difference between () and {} in functional body; either do {return result} or just (result)
+                        // See React_js Note for more!
+                        item => (
+                            <div style={{display: 'flex', justifyContent: 'space-between', borderStyle: 'double', marginBottom: '15px'}}>
+                                <Link to = {`/article/${item['_id']}`}
+                                style={{color: 'gray', fontSize: '30px', textDecoration: 'None'}}>{item['title']}</Link>
+                                <div style={{marginRight: '10px'}}>
+                                    <div style={{display: 'flex', justifyContent: 'space-evenly'}}>
+                                    <h4 style = {{color:'green'}}>{item['upvote']}</h4>
+                                    <h4 style = {{color: 'red'}}>{item['downvote']}</h4>
+                                    </div>
+                                    <h5>Published on: {item['published']}</h5>
                                 </div>
-                                <h5>Published on: {item['published']}</h5>
                             </div>
-                        </div>
+                        )
                     )
-                )
-            }
+                }
+                </div>
             </div>
-        </div>
-    );
+        );
+    } else {
+        return (
+            <h1>You are not logged in. Please log in through <Link to = "/login">here</Link>.</h1>
+        );
+    }
 };
 
 export default ArticleList;

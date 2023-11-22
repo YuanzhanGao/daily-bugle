@@ -60,7 +60,7 @@ const DraftArticle = (props) => {
         drafted['published'] = new Date().toLocaleDateString([], { year: 'numeric', month: 'long', day: 'numeric' });
 
         
-        await fetch("http://localhost:5000/account/articles/draft", {
+        await fetch("http://localhost:5000/articles/draft", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

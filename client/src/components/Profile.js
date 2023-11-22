@@ -11,9 +11,10 @@ const Profile = (props) => {
     {
         const getAN = async () => {
             // fetch article number only if we have a user stored in cookie in the first place
+            // otherwise if the user is not logged in it causes an error to come to this page directly
             if (props.curr_user) {
                 var AN = 0;
-                await fetch(`http://localhost:5000/account/articles/${props.curr_user['email']}`, {
+                await fetch(`http://localhost:5000/articles/${props.curr_user['email']}`, {
                     method: "GET",
                     headers: {
                     "Content-Type": "application/json",
