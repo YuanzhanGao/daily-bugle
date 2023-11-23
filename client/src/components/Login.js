@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { useNavigate } from "react-router";
-import { Link } from "react-router-dom";
+import {Link} from "react-router-dom";
 
 const UserLogin = (props) => {
 
@@ -96,7 +96,7 @@ const UserLogin = (props) => {
                 <button className="ui button blue">Log In</button>
             </form>
             <br></br>
-            <Link to= "/register">Register Your Account</Link>
+            <Link to = "/register">Register Your Account</Link>
         
         </div>
         );

@@ -198,6 +198,37 @@ recordRoutes.route("/articles/article/author/:email").get(async function (req, r
   }
 });
 
+// This section will help you update upvotes/downvotes
+recordRoutes.route("/articles/article/updownvote/update").put(async function (req, res) {
+  //get the database
+  let db_connect = dbo.getDb();
+
+  // get the article we want to update
+  let articleFilter = {
+    _id: new ObjectId(req.body.id)
+  };
+
+  updateDocument = {
+    $set: {
+      upvote: req.body.upvote,
+      downvote: req.body.downvote
+    }
+  }
+
+  try {
+    await db_connect.collection("articles")
+    .updateOne(articleFilter, updateDocument)
+    .then(
+      results => res.send(results)
+      )
+    .catch(
+      error=> console.error(error)
+      );
+  } catch (e) {
+    console.log("An error occurred when trying to update upvote/downvote for an article: " + e);
+  }
+});
+
 
 // Comment Related APIs -----------------------------------------------------------------------------------/
 

@@ -10,7 +10,6 @@ import {useCookies} from "react-cookie";
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
-import NavDropdown from 'react-bootstrap/NavDropdown';
 
 function App() {
 
@@ -22,6 +21,15 @@ function App() {
     setCookie("user", user, { path: "/", maxAge: 3600});
   }
 
+  const profileORlogin = () => {
+    if (cookies.user) {
+      return <Nav.Link style={{fontSize: '20px'}} href="/Profile">Profile</Nav.Link>;
+    } else {
+      return <Nav.Link style={{fontSize: '20px'}} href="/Login">Login</Nav.Link>;
+    }
+  }
+
+
   return (
     <div className='ui container'>
           <Navbar expand="lg" className="bg-body-tertiary">
@@ -30,7 +38,7 @@ function App() {
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
               <Navbar.Collapse id="basic-navbar-nav">
                 <Nav className="me-auto">
-                  <Nav.Link href="/Profile">Profile</Nav.Link>
+                  {profileORlogin()}
                 </Nav>
               </Navbar.Collapse>
             </Container>

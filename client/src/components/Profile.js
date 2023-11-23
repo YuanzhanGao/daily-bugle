@@ -48,19 +48,19 @@ const Profile = (props) => {
             <img style={{width: '150px', height: '150px'}} className="ui avatar image" src={userIMG} alt="user"></img>
           </div>
 
-        <h2 style={{display: 'flex', justifyContent: 'center'}}>Hello, {props.curr_user['name']}!</h2>
+        <h1 style={{display: 'flex', justifyContent: 'center'}}>Hello, {props.curr_user['name']}!</h1>
 
         <hr></hr>
 
         <div style={{display: 'flex'}}>
-            <h1 style={{marginRight: '100px', marginLeft: '90px', color: 'gray'}}>Your Articles</h1>
-            <h1 style={{marginLeft: '10px', marginLeft: '350px', color: 'gray'}}>Your Comments</h1>
+            <h2 style={{marginRight: '100px', marginLeft: '90px', color: 'gray'}}>Your Articles</h2>
+            <h2 style={{marginLeft: '10px', marginLeft: '350px', color: 'gray'}}>Your Comments</h2>
         </div>
 
         <div style={{display: 'flex'}}>
-            <h1 style={{marginRight: '100px', marginLeft: '170px', color: 'gray'}}>
+            <h2 style={{marginRight: '100px', marginLeft: '170px', color: 'gray'}}>
                 <Link to="/profile/articles" style={{color: 'gray', textDecoration: 'None'}}>{articleNum}</Link>
-            </h1>
+            </h2>
             {/* <button className="ui button blue" onClick = {redirect_write}>Start Writing!</button> */}
         </div>
 
