@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react";
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Link } from "react-router-dom";
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import ThumbDownOffAltIcon from '@mui/icons-material/ThumbDownOffAlt';
@@ -9,6 +9,9 @@ import userIMG from "../images/user.jpg";
 const Article = (props) => {
     // get the id of the article to access its content
     let { articleID } = useParams();
+
+    // defined the navigate variable
+    const navigate = useNavigate();
 
     // set the article state
     const [article, setarticle] = useState([
@@ -48,6 +51,40 @@ const Article = (props) => {
 
     // set up a state to store the author's user name fetched from user's email
     const [authorName, setauthorName] = useState('');
+
+    // get a list of all ads information from the database
+    const [Ad, setAd] = useState(
+        {
+            bcolor: "white",
+            adtitle: "",
+            clicks:0
+        }
+    );
+
+    useEffect(()=> {
+        const getAds = async () => {
+            if (props.curr_user) {
+                const response = await fetch ("http://localhost:5000/ads/getall", {
+                    method: "GET",
+                    headers: {
+                    "Content-Type": "application/json",
+                    },
+                });
+
+                const result = await response.json();
+
+                // get a random element from the ad list
+                // Get a random index within the array length
+                let randomIndex = Math.floor(Math.random() * result.length);
+
+                setAd(result[randomIndex]);
+            }
+        };
+
+        getAds();
+    }, [props.curr_user]
+    );
+    
 
     // upon loading (only if curr_user is in props). get the article and all its comments
     useEffect(()=> {
@@ -222,6 +259,18 @@ const Article = (props) => {
     }, [Upvoted, Downvoted]);
 
 
+    const adRecord = async () => {
+        const response = await fetch("http://localhost:5000/ads/clickupdate", {
+            method: "PUT",
+            headers: {
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify(Ad),
+        });
+        
+        navigate("/spiderman");
+    };
+    // JAX render ---------------------------------------------------------------------------------
 
     if (props.curr_user) {
         return (
@@ -262,6 +311,11 @@ const Article = (props) => {
 
                 <hr></hr>
 
+                {/* Ad section */}
+                <div style={{backgroundColor: Ad['bcolor'], height: '100px', cursor: 'pointer'}} 
+                onClick={adRecord}>
+                    <p style={{fontFamily: 'Fantasy', fontSize: '50px', textAlign: 'center'}}>{Ad['adtitle']}</p>
+                </div>
                 {/* Comment Section */}
                 <div>
                     <h2 style = {{fontWeight: 'bold'}}>Comments</h2>

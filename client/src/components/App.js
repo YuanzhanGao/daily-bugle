@@ -4,6 +4,7 @@ import UserLogin from './Login';
 import Profile from './Profile';
 import DraftArticle from './Draft';
 import ArticleList from './AList';
+import CommentList from './CList';
 import Article from './Article';
 import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import {useCookies} from "react-cookie";
@@ -69,6 +70,11 @@ function App() {
           <Route 
             path="/profile/articles"
             element={<ArticleList curr_user = {cookies.user}/>} 
+            />
+
+          <Route 
+            path="/profile/comments"
+            element={<CommentList curr_user = {cookies.user}/>} 
             />
 
           <Route 

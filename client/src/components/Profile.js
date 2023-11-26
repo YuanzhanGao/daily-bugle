@@ -6,6 +6,8 @@ const Profile = (props) => {
 
     const [articleNum, setarticleNum] = useState(0);
 
+    const [commentNum, setcommentNum] = useState(0);
+
     // get number of articles
     useEffect(() => 
     {
@@ -35,7 +37,33 @@ const Profile = (props) => {
                 setarticleNum(AN);
             }
     };
+
+    const getCN = async () => {
+        if (props.curr_user) {
+            var CN = 0;
+            await fetch(`http://localhost:5000/comments/author/${props.curr_user['email']}`, {
+                method: "GET",
+                headers: {
+                "Content-Type": "application/json",
+                },
+            }).
+            then(
+                response => response.json()
+            ).
+            then(
+                result => {
+                    CN = result.length;
+                }
+            )
+            .catch(error => {
+                    window.alert(error);
+                    return;
+            });
+            setcommentNum(CN);
+        }
+    };
         getAN();
+        getCN();
     },[props.curr_user]);
 
 
@@ -54,16 +82,21 @@ const Profile = (props) => {
 
         <div style={{display: 'flex'}}>
             <h2 style={{marginRight: '100px', marginLeft: '90px', color: 'gray'}}>Your Articles</h2>
-            <h2 style={{marginLeft: '10px', marginLeft: '350px', color: 'gray'}}>Your Comments</h2>
+            <h2 style={{marginRight: '10px', marginLeft: '350px', color: 'gray'}}>Your Comments</h2>
         </div>
 
         <div style={{display: 'flex'}}>
             <h2 style={{marginRight: '100px', marginLeft: '170px', color: 'gray'}}>
-                <Link to="/profile/articles" style={{color: 'gray', textDecoration: 'None'}}>{articleNum}</Link>
+                <Link to="/profile/articles" style={{color: 'gray', textDecoration: 'None',
+                                                    fontSize: '40px'}}>{articleNum}</Link>
             </h2>
-            {/* <button className="ui button blue" onClick = {redirect_write}>Start Writing!</button> */}
-        </div>
 
+            <h2 style={{marginLeft: '500px', color: 'gray'}}>
+                <Link to="/profile/comments" style={{color: 'gray', textDecoration: 'None',
+                                                    fontSize: '40px'}}>{commentNum}</Link>
+            </h2>
+        </div>
+        
         </div>
           
         );

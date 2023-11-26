@@ -262,7 +262,7 @@ recordRoutes.route("/comments/draft").post(async function (req, res) {
 });
 
 
-// This section will help you get all comments posted under a particular particular
+// This section will help you get all comments posted under a particular article
 recordRoutes.route("/comments/:articleID").get(async function (req, res) {
   //get the database
   let db_connect = dbo.getDb();
@@ -285,5 +285,106 @@ recordRoutes.route("/comments/:articleID").get(async function (req, res) {
     console.log("An error occurred when trying to get comments under a article: " + e);
   }
 });
+
+// This section will help you get all comments posted by a particular person
+recordRoutes.route("/comments/author/:email").get(async function (req, res) {
+  //get the database
+  let db_connect = dbo.getDb();
+
+  let myobj = {
+    author: req.params.email
+  };
+
+  try {
+    await db_connect.collection("comments")
+    .find(myobj)
+    .toArray()
+    .then( 
+      results => res.send(results)
+      )
+    .catch(
+      error=> console.error(error)
+      );
+  } catch (e) {
+    console.log("An error occurred when trying to get comments by a person: " + e);
+  }
+});
+
+// This section will help you get an article from a comment
+recordRoutes.route("/comments/article/:articleID").get(async function (req, res) {
+  //get the database
+  let db_connect = dbo.getDb();
+
+  let myobj = {
+    _id: new ObjectId(req.params.articleID)
+  };
+
+  try {
+    await db_connect.collection("articles")
+    .find(myobj)
+    .toArray()
+    .then( 
+      results => res.send(results)
+      )
+    .catch(
+      error=> console.error(error)
+      );
+  } catch (e) {
+    console.log("An error occurred when trying to article from a comment: " + e);
+  }
+});
+
+
+// Ads Related APIs -----------------------------------------------------------------------------------/
+// This section will help you get all ads from the database
+recordRoutes.route("/ads/getall").get(async function (req, res) {
+  //get the database
+  let db_connect = dbo.getDb();
+
+  try {
+    await db_connect.collection("advertisement")
+    .find()
+    .toArray()
+    .then( 
+      results => res.send(results)
+      )
+    .catch(
+      error=> console.error(error)
+      );
+  } catch (e) {
+    console.log("An error occurred when trying to get all comments: " + e);
+  }
+});
+
+
+// This section will help you update ad click times
+recordRoutes.route("/ads/clickupdate").put(async function (req, res) {
+  //get the database
+  let db_connect = dbo.getDb();
+
+  filter = {
+    _id: new ObjectId(req.body._id)
+  };
+
+  updateDocument = {
+    $set: {
+      clicks: req.body.clicks + 1
+    }
+  }
+
+  try {
+    await db_connect.collection("advertisement")
+    .updateOne(filter, updateDocument)
+    .then(
+      results => res.send(results)
+      )
+    .catch(
+      error=> console.error(error)
+      );
+  } catch (e) {
+    console.log("An error occurred when trying to update click numbers: " + e);
+  }
+});
+
 
 module.exports = recordRoutes;
