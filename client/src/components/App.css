@@ -36,3 +36,22 @@
     transform: rotate(360deg);
   }
 }
+
+
+.divider{
+  position:absolute;
+  left:50%;
+  top:30%;
+  bottom:1%;
+  border-left: 1px solid gray;
+}
+
+.inner {
+  width: 50%;
+  height: 42.5%;
+  box-sizing: border-box;
+  border: 1px solid gray;
+  float: left;
+  text-align: center;
+  padding: 16px;
+}

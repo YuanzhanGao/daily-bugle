@@ -318,6 +318,7 @@ const Article = (props) => {
                 onClick={adRecord}>
                     <p style={{fontFamily: 'Fantasy', fontSize: '50px', textAlign: 'center'}}>{Ad['adtitle']}</p>
                 </div>
+
                 {/* Comment Section */}
                 <div>
                     <h2 style = {{fontWeight: 'bold'}}>Comments</h2>
@@ -340,7 +341,9 @@ const Article = (props) => {
                     </div>
                 </form>
                 <hr></hr>
+                </div>
                 {/* Display all Comment of the article */}
+                <div>
                 {
                 CommentList.map(
                     item => (

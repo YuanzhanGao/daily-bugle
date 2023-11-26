@@ -230,8 +230,10 @@ recordRoutes.route("/articles/article/updownvote/update").put(async function (re
 });
 
 
-// This section will help you get at most 4 articles from the politics category
-recordRoutes.route("/articles/politics").get(async function (req, res) {
+// This section will help you get at most 3 articles from the politics category
+// original set as /articles/politics, which is in conflict with the articles/:email api defined above
+// Important! API endpoints need to be unique and un-ambiguous!!
+recordRoutes.route("/articles/get/politics").get(async function (req, res) {
   //get the database
   let db_connect = dbo.getDb();
 
@@ -239,11 +241,19 @@ recordRoutes.route("/articles/politics").get(async function (req, res) {
     category: ['Politics']
   };
 
+  // note for myself:
+  // MongoDB 3.2 introduces the ability to sample from the database, however,
+  // this requires there are at least 100 documents in the database. For the purpose
+  // of this project, we will simply grab all articles and select a subset of them
+  // since there are only a handle of articles; however, for most efficient sampling
+  // please use mongoDB's sample() method in the future.
+  // See referrence at: https://www.mongodb.com/docs/manual/reference/operator/aggregation/sample/
+
   try {
     await db_connect.collection("articles")
     .find(myobj)
     .toArray()
-    .then( 
+    .then(
       results => res.send(results)
       )
     .catch(
@@ -255,6 +265,77 @@ recordRoutes.route("/articles/politics").get(async function (req, res) {
 });
 
 
+// This section will help you get at most 3 articles from the business category
+recordRoutes.route("/articles/get/business").get(async function (req, res) {
+  //get the database
+  let db_connect = dbo.getDb();
+
+  let myobj = {
+    category: ['Business']
+  };
+
+  try {
+    await db_connect.collection("articles")
+    .find(myobj)
+    .toArray()
+    .then(
+      results => res.send(results)
+      )
+    .catch(
+      error=> console.error(error)
+      );
+  } catch (e) {
+    console.log("An error occurred when trying to get business articles: " + e);
+  }
+});
+
+// This section will help you get at most 3 articles from the sports category
+recordRoutes.route("/articles/get/sports").get(async function (req, res) {
+  //get the database
+  let db_connect = dbo.getDb();
+
+  let myobj = {
+    category: ['Sports']
+  };
+  
+  try {
+    await db_connect.collection("articles")
+    .find(myobj)
+    .toArray()
+    .then(
+      results => res.send(results)
+      )
+    .catch(
+      error=> console.error(error)
+      );
+  } catch (e) {
+    console.log("An error occurred when trying to get sports articles: " + e);
+  }
+});
+
+// This section will help you get at most 3 articles from the entertainment category
+recordRoutes.route("/articles/get/entertain").get(async function (req, res) {
+  //get the database
+  let db_connect = dbo.getDb();
+
+  let myobj = {
+    category: ['Entertainment']
+  };
+  
+  try {
+    await db_connect.collection("articles")
+    .find(myobj)
+    .toArray()
+    .then(
+      results => res.send(results)
+      )
+    .catch(
+      error=> console.error(error)
+      );
+  } catch (e) {
+    console.log("An error occurred when trying to get entertainment articles: " + e);
+  }
+});
 
 // Comment Related APIs -----------------------------------------------------------------------------------/
 
