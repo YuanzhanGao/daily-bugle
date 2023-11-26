@@ -137,7 +137,6 @@ const Article = (props) => {
 
             }
         };
-
         getArticle();
         getComments();
     }, [props.curr_user]
@@ -151,9 +150,7 @@ const Article = (props) => {
             alert("You cannot post empty comment!");
             return;
         }
-
         const drafted = {...Comment};
-
         drafted['under'] = articleID;
         drafted['author'] = props.curr_user['email'];
         drafted['published'] = new Date().toLocaleDateString([], { year: 'numeric', month: 'long', day: 'numeric' });
@@ -259,6 +256,7 @@ const Article = (props) => {
     }, [Upvoted, Downvoted]);
 
 
+    // update click number of the advertisement and opens up new tab to Spiderman page
     const adRecord = async () => {
         const response = await fetch("http://localhost:5000/ads/clickupdate", {
             method: "PUT",
@@ -268,7 +266,11 @@ const Article = (props) => {
             body: JSON.stringify(Ad),
         });
         
-        navigate("/spiderman");
+        // open a new tab to Spiderman's main page
+        window.open(
+            'https://www.marvel.com/movies/spider-man-no-way-home',
+            '_blank'
+        );
     };
     // JAX render ---------------------------------------------------------------------------------
 
@@ -352,7 +354,6 @@ const Article = (props) => {
                 )
                 }
                 </div>
-
             </div>
         );
     } else {

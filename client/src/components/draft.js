@@ -122,7 +122,6 @@ const DraftArticle = (props) => {
 
                     <Select
                     components={animatedComponents}
-                    isMulti
                     options={options}
                     className="basic-multi-select"
                     classNamePrefix="select"

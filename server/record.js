@@ -230,6 +230,32 @@ recordRoutes.route("/articles/article/updownvote/update").put(async function (re
 });
 
 
+// This section will help you get at most 4 articles from the politics category
+recordRoutes.route("/articles/politics").get(async function (req, res) {
+  //get the database
+  let db_connect = dbo.getDb();
+
+  let myobj = {
+    category: ['Politics']
+  };
+
+  try {
+    await db_connect.collection("articles")
+    .find(myobj)
+    .toArray()
+    .then( 
+      results => res.send(results)
+      )
+    .catch(
+      error=> console.error(error)
+      );
+  } catch (e) {
+    console.log("An error occurred when trying to get politics articles: " + e);
+  }
+});
+
+
+
 // Comment Related APIs -----------------------------------------------------------------------------------/
 
 // This section will help you create a new comment

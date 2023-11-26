@@ -6,6 +6,7 @@ import DraftArticle from './Draft';
 import ArticleList from './AList';
 import CommentList from './CList';
 import Article from './Article';
+import Main from './Main';
 import { BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import {useCookies} from "react-cookie";
 import Container from 'react-bootstrap/Container';
@@ -47,6 +48,11 @@ function App() {
         <Router>
 
           <Routes>
+            <Route 
+            path="/" 
+            element={<Main />} 
+            />
+
             <Route 
             path="/register" 
             element={<AccountRegister />} 
