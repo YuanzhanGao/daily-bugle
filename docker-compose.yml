@@ -1,0 +1,25 @@
+version: '1'
+
+services:
+  dailybuglefrontend:
+    build:
+      context: ./client
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+  dailybuglebackend:
+    build:
+      context: ./server
+    ports:
+      - "5000:5000"   
+    depends_on:
+      - db
+  db:
+    volumes:
+      - dailybugle_db:/data/db
+    image: mongo:latest
+    ports:
+      - "27017:27017" 
+volumes:
+   dailybugle_db:
