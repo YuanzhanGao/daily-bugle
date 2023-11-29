@@ -11,6 +11,17 @@
 Note:
 
 1. Ensure MongoDB is working correctly on your machine
+Either through MongoDB CLI or MongoDB Compass,
+
+--a) Create database `DailyBugle`
+--b) Inside the `DailyBugle` database, create the following collections
+```
+users
+comments
+articles
+advertisement
+```
+
 2. cd into an empty directory and clone this repository locally with 
 ```
 git clone https://github.com/YuanzhanGao/daily-bugle.git
