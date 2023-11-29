@@ -11,10 +11,8 @@
 Note:
 
 1. Ensure MongoDB is working correctly on your machine
-Either through MongoDB CLI or MongoDB Compass,
-
---a) Create database `DailyBugle`
---b) Inside the `DailyBugle` database, create the following collections
+Either through MongoDB CLI or MongoDB Compass, create database `DailyBugle`; 
+Then inside the `DailyBugle` database, create the following collections
 ```
 users
 comments
