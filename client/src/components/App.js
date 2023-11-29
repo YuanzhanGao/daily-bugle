@@ -14,8 +14,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 
 function App() {
-
-  const [cookies, setCookie] = useCookies(["user"]);
+  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
 
   // define 
   function handleLogin(user) {
@@ -23,11 +22,35 @@ function App() {
     setCookie("user", user, { path: "/", maxAge: 3600});
   }
 
+  // log out
+  function logout() {
+    removeCookie('user',{path:'/'});
+    // open a new tab to Spiderman's main page
+    window.open(
+      '/'
+  );
+  }
+
   const profileORlogin = () => {
     if (cookies.user) {
-      return <Nav.Link style={{fontSize: '20px'}} href="/Profile">Profile</Nav.Link>;
+      return (
+          <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+            <Nav.Link style={{fontSize: '20px'}} href="/Profile">Profile</Nav.Link>
+          </Nav>
+          <Nav className="ms-auto">
+            <Nav.Link style={{fontSize: '20px', color: 'gray'}} onClick={logout}>Logout</Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      )
     } else {
-      return <Nav.Link style={{fontSize: '20px'}} href="/Login">Login</Nav.Link>;
+      return (
+        <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="me-auto">
+          <Nav.Link style={{fontSize: '20px'}} href="/Login">Login</Nav.Link>
+        </Nav>
+      </Navbar.Collapse>
+      )
     }
   }
 
@@ -38,11 +61,7 @@ function App() {
             <Container>
               <Navbar.Brand href='/'>Daily Bugle</Navbar.Brand>
               <Navbar.Toggle aria-controls="basic-navbar-nav" />
-              <Navbar.Collapse id="basic-navbar-nav">
-                <Nav className="me-auto">
-                  {profileORlogin()}
-                </Nav>
-              </Navbar.Collapse>
+                {profileORlogin()}
             </Container>
           </Navbar>
         <Router>

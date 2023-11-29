@@ -63,83 +63,76 @@ const Article = (props) => {
 
     useEffect(()=> {
         const getAds = async () => {
-            if (props.curr_user) {
-                const response = await fetch ("http://localhost:5000/ads/getall", {
-                    method: "GET",
-                    headers: {
-                    "Content-Type": "application/json",
-                    },
-                });
+            const response = await fetch ("http://localhost:5000/ads/getall", {
+                method: "GET",
+                headers: {
+                "Content-Type": "application/json",
+                },
+            });
 
-                const result = await response.json();
+            const result = await response.json();
 
-                // get a random element from the ad list
-                // Get a random index within the array length
-                let randomIndex = Math.floor(Math.random() * result.length);
+            // get a random element from the ad list
+            // Get a random index within the array length
+            let randomIndex = Math.floor(Math.random() * result.length);
 
-                setAd(result[randomIndex]);
-            }
+            setAd(result[randomIndex]);
         };
 
         getAds();
-    }, [props.curr_user]
+    }, []
     );
     
 
     // upon loading (only if curr_user is in props). get the article and all its comments
     useEffect(()=> {
         const getArticle = async () => {
-            if (props.curr_user) {
-                // get the article info
-                const response = await 
-                fetch(`http://localhost:5000/articles/article/${articleID}`, {
-                    method: "GET",
-                    headers: {
-                    "Content-Type": "application/json",
-                    },
-                });
-                const result = await response.json();
+            // get the article info
+            const response = await 
+            fetch(`http://localhost:5000/articles/article/${articleID}`, {
+                method: "GET",
+                headers: {
+                "Content-Type": "application/json",
+                },
+            });
+            const result = await response.json();
 
-                // set content of the article state
-                setarticle(result);
+            // set content of the article state
+            setarticle(result);
 
-                // set content of the upvote state
-                setUpvote(result[0]['upvote']);
+            // set content of the upvote state
+            setUpvote(result[0]['upvote']);
 
-                // set content of the downvote state
-                setDownvote(result[0]['downvote']);
+            // set content of the downvote state
+            setDownvote(result[0]['downvote']);
 
 
-                // get author name from their email
-                const authorName = await 
-                fetch(`http://localhost:5000/articles/article/author/${result[0]['author']}`, {
-                    method: "GET",
-                    headers: {
-                    "Content-Type": "application/json",
-                    },
-                });
-                const authorName_json = await authorName.json();
-                setauthorName(authorName_json[0]['name']);
-            }
+            // get author name from their email
+            const authorName = await 
+            fetch(`http://localhost:5000/articles/article/author/${result[0]['author']}`, {
+                method: "GET",
+                headers: {
+                "Content-Type": "application/json",
+                },
+            });
+            const authorName_json = await authorName.json();
+            setauthorName(authorName_json[0]['name']);
         };
 
         const getComments = async () => {
-            if (props.curr_user) {
-                const response = await 
-                fetch(`http://localhost:5000/comments/${articleID}`, {
-                    method: "GET",
-                    headers: {
-                    "Content-Type": "application/json",
-                    },
-                });
-                const result = await response.json();
-                setCommentList(result);
-
-            }
+            const response = await 
+            fetch(`http://localhost:5000/comments/${articleID}`, {
+                method: "GET",
+                headers: {
+                "Content-Type": "application/json",
+                },
+            });
+            const result = await response.json();
+            setCommentList(result);
         };
         getArticle();
         getComments();
-    }, [props.curr_user]
+    }, []
     );
 
     // function for posting comment
@@ -268,63 +261,16 @@ const Article = (props) => {
         
         // open a new tab to Spiderman's main page
         window.open(
-            'https://www.marvel.com/movies/spider-man-no-way-home',
-            '_blank'
+            'https://www.marvel.com/movies/spider-man-no-way-home'
         );
     };
-    // JAX render ---------------------------------------------------------------------------------
 
-    if (props.curr_user) {
-        return (
-            <div className="ui main">
-                <br></br>
-                <p style={{fontSize: '40px', textAlign:"center", textTransform: 'uppercase',
-                            fontFamily: 'serif'}}>{article[0]['title']}</p>
-                <div style={{
-                fontSize: '20px', 
-                fontFamily: 'serif', 
-                display: 'flex', 
-                justifyContent: 'center'
-                }}>
-                Relevant Topics:{
-                    article[0]['category'].map(
-                        item => <div style={{fontFamily: 'serif'}}>{item}</div>
-                    )
-                }
-                </div>
-                <div style={{textAlign: 'center', color: 'gray', fontSize: '20px',
-                            fontFamily: 'serif'}}>Author: {authorName} ({article[0]['author']})</div>
-
-                <div style={{textAlign: 'center'}}>
-                <IconButton onClick={handleUpvote}>
-                    <ThumbUpOffAltIcon style={{color: 'green'}}></ThumbUpOffAltIcon>{UpvoteCount}
-                </IconButton>
-
-                <IconButton onClick={handleDownvote}>
-                    <ThumbDownOffAltIcon style={{color: 'red'}}></ThumbDownOffAltIcon>{DownvoteCount}
-                </IconButton>
-                </div>
-
-                {/* Content of the article goes down here */}
-                <hr></hr>
-                <h2 style={{marginBottom: '50px', fontFamily: 'serif'}}>
-                    {article[0]['content']}
-                </h2>
-
-                <hr></hr>
-
-                {/* Ad section */}
-                <div style={{backgroundColor: Ad['bcolor'], height: '100px', cursor: 'pointer'}} 
-                onClick={adRecord}>
-                    <p style={{fontFamily: 'Fantasy', fontSize: '50px', textAlign: 'center'}}>{Ad['adtitle']}</p>
-                </div>
-
-                {/* Comment Section */}
-                <div>
-                    <h2 style = {{fontWeight: 'bold'}}>Comments</h2>
-                    <form className="ui form"
-                    onSubmit={post_comment}
-                    >
+    // only allow users to post comments if they are logged in
+    const renderCSIfLogged = () => {
+        if (props.curr_user) {
+            return (
+            <div>
+                <form className="ui form" onSubmit={post_comment}>
                     <div className="field">
                         <textarea
                         name = "content"
@@ -340,11 +286,24 @@ const Article = (props) => {
                         <button className="ui button green">Submit</button>
                     </div>
                 </form>
-                <hr></hr>
-                </div>
-                {/* Display all Comment of the article */}
-                <div>
-                {
+            </div>
+            )
+        } else {
+            return (
+            <div>
+                <p style={{fontSize: '20px', textAlign: 'center', fontFamily: 'serif'}}>
+                To make a comment, You need to<Link to = '/login'> log in </Link>first.
+                </p>
+            </div>
+            )
+        }
+
+    };
+
+    // render a list of comments
+    const renderCommentList = () => {
+        if (CommentList.length > 0) {
+            return (
                 CommentList.map(
                     item => (
                         <div style={{marginBottom: '15px'}}>
@@ -355,15 +314,82 @@ const Article = (props) => {
                         </div>
                     )
                 )
-                }
-                </div>
-            </div>
-        );
-    } else {
-        return (
-            <h1>You are not logged in. Please log in through <Link to = "/login">here</Link>.</h1>
-        );
+            )
+        } else {
+            return (
+                <div>
+                    <h5 style={{fontSize: '20px', textAlign: 'center', fontFamily: 'serif'}}>
+                        There is no comment under this article yet!
+                    </h5>
+                    <br></br>
+                </div>                
+            )
+        }
     }
+    // JAX render ---------------------------------------------------------------------------------
+
+    return (
+        <div className="ui main">
+            <br></br>
+            <p style={{fontSize: '40px', textAlign:"center", textTransform: 'uppercase',
+                        fontFamily: 'serif'}}>{article[0]['title']}</p>
+            <div style={{
+            fontSize: '20px', 
+            fontFamily: 'serif', 
+            display: 'flex', 
+            justifyContent: 'center'
+            }}>
+            Relevant Topics:{
+                article[0]['category'].map(
+                    item => <div style={{fontFamily: 'serif'}}>{item}</div>
+                )
+            }
+            </div>
+            <div style={{textAlign: 'center', color: 'gray', fontSize: '20px',
+                        fontFamily: 'serif'}}>Author: {authorName} ({article[0]['author']})</div>
+
+            <div style={{textAlign: 'center'}}>
+            <IconButton onClick={handleUpvote}>
+                <ThumbUpOffAltIcon style={{color: 'green'}}></ThumbUpOffAltIcon>{UpvoteCount}
+            </IconButton>
+
+            <IconButton onClick={handleDownvote}>
+                <ThumbDownOffAltIcon style={{color: 'red'}}></ThumbDownOffAltIcon>{DownvoteCount}
+            </IconButton>
+            </div>
+
+            {/* Content of the article goes down here */}
+            <hr></hr>
+            <h2 style={{marginBottom: '50px', fontFamily: 'serif'}}>
+                {article[0]['content']}
+            </h2>
+
+            <hr></hr>
+
+            {/* Ad section */}
+            <div style={{backgroundColor: Ad['bcolor'], height: '100px', cursor: 'pointer'}} 
+            onClick={adRecord}>
+                <p style={{fontFamily: 'Fantasy', fontSize: '50px', textAlign: 'center'}}>{Ad['adtitle']}</p>
+            </div>
+
+
+            {/* Comment Section */}
+            <hr></hr>
+            <h2 style = {{fontWeight: 'bold'}}>Comments</h2>
+            {
+                renderCSIfLogged()
+            }
+            <hr></hr>
+
+            {/* Display all Comment of the article */}
+            <div>
+            <h2 style = {{fontWeight: 'bold'}}>Other's Comments</h2>
+            {
+                renderCommentList()
+            }
+            </div>
+        </div>
+    );
 };
 
 export default Article;
