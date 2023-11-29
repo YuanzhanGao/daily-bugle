@@ -31,7 +31,7 @@ npm install
 #### Why?
 The `client` folder is created with the `npx create-react-project client` command, which conveniently created a `.gitignore` file that ignores the `/node_modules` folder, while the `/server` folder is initiated with `npm init -y`, whose `.gitignore` is added later on.
 
-4. In a terminal, cd into the `server` folder and run
+4. In a SEPARATE terminal, cd into the `server` folder and run
 ```
 node server.js
 ```
