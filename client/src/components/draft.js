@@ -11,6 +11,9 @@ const DraftArticle = (props) => {
     // make select compomnent animated
     const animatedComponents = makeAnimated();
 
+    // allow writer upload image
+    const [image, setImage] = useState("");
+
     const [Article, setArticle] = useState({
         title: "",
         content: "",
@@ -18,7 +21,8 @@ const DraftArticle = (props) => {
         category: [],
         upvote: 0,
         downvote: 0,
-        published: ""
+        published: "",
+        image: ""
     });
 
     // category option
@@ -28,6 +32,17 @@ const DraftArticle = (props) => {
         { value: 'Sports', label: 'Sports' },
         { value: 'Entertainment', label: 'Entertainment'}
       ]
+
+    // convert image to base 64
+    function convertToBase64(e) {
+        console.log(e);
+        var reader = new FileReader();
+        reader.readAsDataURL(e.target.files[0]);
+        reader.onload = () => {
+            console.log(reader.result);
+            setImage(reader.result);
+        }
+    }
 
 
 
@@ -43,21 +58,23 @@ const DraftArticle = (props) => {
             return;
         }
 
-        if (Article.category.length ===0) {
+        if (Article.category.length === 0) {
             alert("Please select a category of your post!");
             return;
         }
 
-        // set the category attribute of Article object to only category values
-        let category_value = Article.category.map(
-            (item) => item['value']
-        );
+        // console.log(Article.category);
+        // // set the category attribute of Article object to only category values
+        // let category_value = Article.category.map(
+        //     (item) => item['value']
+        // );
 
         const drafted = {...Article};
-        drafted['category'] = category_value;
+        drafted['category'] = [Article.category['value']];
         drafted['author'] = props.curr_user['email'];
         // set published date
         drafted['published'] = new Date().toLocaleDateString([], { year: 'numeric', month: 'long', day: 'numeric' });
+        drafted['image'] = image;
 
         
         await fetch("http://localhost:5000/articles/draft", {
@@ -79,7 +96,8 @@ const DraftArticle = (props) => {
             category: [],
             upvote: 0,
             downvote: 0,
-            published: ""
+            published: "",
+            image: ""
         });
 
         navigate("/Profile");
@@ -118,6 +136,19 @@ const DraftArticle = (props) => {
                             {...prevState, content: e.target.value}
                         )
                         )}></textarea>
+                    </div>
+
+                    {/* Allow users to upload image */}
+                    <div className="field">
+                        <label>Upload Images for your articles (For now we only allow for one image): </label>
+                        <input
+                        accept="image/*"
+                        type = "file"
+                        onChange={convertToBase64}
+                        >
+                        </input>
+                        <p>Preview:</p>
+                        {image === ""||image=== null?"":<img width={100} height={100} alt = 'articleImage' src={image}/>}
                     </div>
 
                     <Select

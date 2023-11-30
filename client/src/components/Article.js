@@ -10,9 +10,6 @@ const Article = (props) => {
     // get the id of the article to access its content
     let { articleID } = useParams();
 
-    // defined the navigate variable
-    const navigate = useNavigate();
-
     // set the article state
     const [article, setarticle] = useState([
         {
@@ -22,7 +19,8 @@ const Article = (props) => {
             category: [],
             upvote: 0,
             downvote: 0,
-            published: ""
+            published: "",
+            image: ""
         }
     ]);
 
@@ -249,6 +247,7 @@ const Article = (props) => {
     }, [Upvoted, Downvoted]);
 
 
+
     // update click number of the advertisement and opens up new tab to Spiderman page
     const adRecord = async () => {
         const response = await fetch("http://localhost:5000/ads/clickupdate", {
@@ -325,6 +324,19 @@ const Article = (props) => {
                 </div>                
             )
         }
+    };
+
+    const renderArticleImage = () => {
+        if (typeof article[0]['image'] === 'undefined') {
+            return;
+        } else {
+            console.log(article[0]['image']);
+            console.log(article[0]['author']);
+            return (
+                <img className="articleImage" width={100} height={100} alt = 'articleImage' src={article[0]['image']}/>
+            )
+        }
+
     }
     // JAX render ---------------------------------------------------------------------------------
 
@@ -339,11 +351,7 @@ const Article = (props) => {
             display: 'flex', 
             justifyContent: 'center'
             }}>
-            Relevant Topics:{
-                article[0]['category'].map(
-                    item => <div style={{fontFamily: 'serif'}}>{item}</div>
-                )
-            }
+            Relevant Topics:{article[0]['category'][0]}
             </div>
             <div style={{textAlign: 'center', color: 'gray', fontSize: '20px',
                         fontFamily: 'serif'}}>Author: {authorName} ({article[0]['author']})</div>
@@ -360,9 +368,12 @@ const Article = (props) => {
 
             {/* Content of the article goes down here */}
             <hr></hr>
-            <h2 style={{marginBottom: '50px', fontFamily: 'serif'}}>
-                {article[0]['content']}
-            </h2>
+            <div>
+                {renderArticleImage()}
+                <p style={{marginBottom: '50px', fontFamily: 'serif', fontSize: '30px'}}>
+                    {article[0]['content']}
+                </p>
+            </div>
 
             <hr></hr>
 

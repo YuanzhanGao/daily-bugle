@@ -132,7 +132,8 @@ recordRoutes.route("/articles/draft").post(async function (req, res) {
     category: req.body.category,
     upvote: req.body.upvote,
     downvote: req.body.downvote,
-    published: req.body.published
+    published: req.body.published,
+    image: req.body.image
   };
 
   try {
